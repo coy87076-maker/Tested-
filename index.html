@@ -24,6 +24,18 @@
             border: 1px dashed #666;
             margin-bottom: 20px;
         }
+        .input-section {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ccc;
+        }
+        .input-group {
+            margin-bottom: 10px;
+        }
+        .input-group label {
+            display: inline-block;
+            width: 160px;
+        }
         .buttons {
             margin: 15px 0;
             display: flex;
@@ -54,21 +66,22 @@
         th {
             background-color: #ddd;
         }
-        .setup-section {
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #ccc;
-        }
     </style>
 </head>
 <body>
 
     <h1>ATM Machine</h1>
 
-    <div class="setup-section" id="setupArea">
-        <label for="nameInput">Enter Account Holder Name: </label>
-        <input type="text" id="nameInput" placeholder="e.g. John Doe">
-        <button onclick="setAccountName()">Submit</button>
+    <div class="input-section">
+        <div class="input-group">
+            <label for="nameInput">Account Holder Name:</label>
+            <input type="text" id="nameInput" placeholder="Enter name">
+            <button onclick="setAccountName()">Set Name</button>
+        </div>
+        <div class="input-group">
+            <label for="amountInput">Transaction Amount:</label>
+            <input type="number" id="amountInput" placeholder="0.00" min="0">
+        </div>
     </div>
 
     <div class="account-info">
