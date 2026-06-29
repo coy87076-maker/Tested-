@@ -1,3 +1,6 @@
+Here is the clean version of your code with all the comments completely removed. The structure, styling, and fixed functionality remain exactly the same.
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -67,9 +70,12 @@ button{
     font-weight: bold;
     cursor: pointer;
     transition: 0.3s;
-
-    /* Creates the slanted sides */
     transform: skew(-20deg);
+}
+
+button span {
+    display: inline-block;
+    transform: skew(20deg);
 }
 
 button:hover{
@@ -138,25 +144,18 @@ table tbody tr:nth-child(even){
 
 <p id="balance">Balance: ₱0.00</p>
 
-<input
-type="string"
-id="name"
-placeholder="Enter Name">
-  <input type="text" id="name" placeholder="Enter Account Holder Name">
-    <button onclick="saveName()">Save Name</button>
+<input type="text" id="name" placeholder="Enter Account Holder Name">
+<button onclick="saveName()"><span>Save Name</span></button>
 
-    <p><strong>Account Holder:</strong> <span id="displayName">None</span></p>
+<p style="margin-top: 15px; margin-bottom: 15px;"><strong>Account Holder:</strong> <span id="displayName">None</span></p>
 
-<input
-type="number"
-id="amount"
-placeholder="Enter Amount">
+<input type="number" id="amount" placeholder="Enter Amount">
 
 
 <div class="buttons">
-<button onclick="checkBalance()">Check Balance</button>
-<button onclick="deposit()">Deposit</button>
-<button onclick="withdraw()">Withdraw</button>
+<button onclick="checkBalance()"><span>Check Balance</span></button>
+<button onclick="deposit()"><span>Deposit</span></button>
+<button onclick="withdraw()"><span>Withdraw</span></button>
 </div>
 
 <div id="message">
@@ -190,168 +189,108 @@ Welcome! Please choose a transaction.
 <script>
 
 let balance = 0;
-
 let transactionLog = [];
+let accountHolder = "None";
 
-/* CHECK BALANCE */
+function saveName(){
+    let inputName = getName();
+    if(inputName.trim() === ""){
+        showMessage("Please enter a valid name.");
+        return;
+    }
+    accountHolder = inputName;
+    document.getElementById("displayName").innerText = accountHolder;
+    showMessage(`Account holder updated to: ${accountHolder}`);
+    document.getElementById("name").value = "";
+}
 
 function checkBalance(){
-
     showMessage(`Your current balance is ₱${balance.toFixed(2)}`);
-
     addTransaction("Balance Inquiry",0);
-
 }
-
-/* DEPOSIT */
 
 function deposit(){
-
     let amount = getAmount();
-
     if(isNaN(amount) || amount<=0){
-
         showMessage("Please enter a valid deposit amount.");
-
         return;
     }
-
     balance += amount;
-
     updateBalance();
-
     showMessage(`Successfully deposited ₱${amount.toFixed(2)}.`);
-
     addTransaction("Deposit",amount);
-
     clearInput();
-
 }
-
-/* WITHDRAW */
 
 function withdraw(){
-
     let amount = getAmount();
-
     if(isNaN(amount) || amount<=0){
-
         showMessage("Please enter a valid withdrawal amount.");
-
         return;
-
     }
-
     if(amount>balance){
-
         showMessage("Insufficient funds.");
-
         return;
-
     }
-
     balance -= amount;
-
     updateBalance();
-
     showMessage(`Successfully withdrew ₱${amount.toFixed(2)}.`);
-
     addTransaction("Withdraw",amount);
-
     clearInput();
-
 }
 
-/* INPUT*/
-
 function getAmount(){
-
     return parseFloat(document.getElementById("amount").value);
-
 }
 
 function getName(){
-
-    return parseFloat(document.getElementById("name").value);
-
-}
-/* UPDATE BALANCE DISPLAY */
-
-function updateBalance(){
-
-    document.getElementById("balance").innerHTML=
-    `Balance: ₱${balance.toFixed(2)}`;
-
+    return document.getElementById("name").value;
 }
 
-/* SHOW MESSAGE */
+if (typeof updateBalance === "undefined") {
+    function updateBalance(){
+        document.getElementById("balance").innerHTML= `Balance: ₱${balance.toFixed(2)}`;
+    }
+} else {
+    function updateBalance(){
+        document.getElementById("balance").innerHTML= `Balance: ₱${balance.toFixed(2)}`;
+    }
+}
 
 function showMessage(message){
-
     document.getElementById("message").innerHTML=message;
-
 }
-
-/* CLEAR INPUT */
 
 function clearInput(){
-
     document.getElementById("amount").value="";
-
 }
-
-/* ADD TRANSACTION */
 
 function addTransaction(type,amount){
-
     transactionLog.push({
-
+        name: accountHolder,
         datetime:new Date().toLocaleString(),
-
         transaction:type,
-
         amount:amount,
-
         balance:balance
-
     });
-
     updateLogTable();
-
 }
 
-/* UPDATE TABLE */ 
-
 function updateLogTable(){
-
     let tbody=document.querySelector("#logTable tbody");
-
     tbody.innerHTML="";
-
     transactionLog.forEach(function(item,index){
-
         tbody.innerHTML+=`
-
         <tr>
-
             <td>${index+1}</td>
-
             <td>${item.name}</td>
-
             <td>${item.datetime}</td>
-
             <td>${item.transaction}</td>
-
             <td>₱${item.amount.toFixed(2)}</td>
-
             <td>₱${item.balance.toFixed(2)}</td>
-
         </tr>
-
         `;
-
     });
-
 }
 
 </script>
@@ -359,3 +298,4 @@ function updateLogTable(){
 </body>
 </html>
 
+```
