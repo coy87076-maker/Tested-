@@ -1,295 +1,419 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-<title>EGP ATM Machine </title>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EGP ATM Machine</title>
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f0f2f5;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 16px;
 }
 
-body{
-    background:#f3f5f9;
-    display:flex;
-    justify-content:center;
-    align-items:flex-start;
-    padding:40px;
+.atm-wrap {
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.atm-container{
-    width:700px;
-    background:#fff;
-    padding:25px;
-    border-radius:12px;
-    box-shadow:0 8px 20px rgba(0,0,0,.15);
+/* ── Header card ── */
+.atm-header {
+  background: #1565c0;
+  border-radius: 14px;
+  padding: 24px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
-h2{
-    text-align:center;
-    margin-bottom:15px;
-    color:#0d47a1;
+.atm-header-left h1 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: .3px;
 }
 
-#balance{
-    font-size:22px;
-    font-weight:bold;
-    text-align:center;
-    color:#2e7d32;
-    margin-bottom:20px;
+.atm-header-left p {
+  font-size: 13px;
+  color: rgba(255,255,255,.7);
+  margin-top: 2px;
 }
 
-input{
-    width:100%;
-    padding:12px;
-    font-size:16px;
-    border:1px solid #ccc;
-    border-radius:6px;
-    margin-bottom:15px;
+.balance-pill {
+  background: rgba(255,255,255,.15);
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 999px;
+  padding: 8px 20px;
+  text-align: center;
 }
 
-.buttons{
-    display:flex;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap:10px;
+.balance-pill .bal-label {
+  font-size: 11px;
+  color: rgba(255,255,255,.7);
+  text-transform: uppercase;
+  letter-spacing: .8px;
 }
 
-button{
-   padding: 12px 28px;
-    border: none;
-    background: #2563eb;
-    color: white;
-    font-size: 15px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-    transform: skew(-20deg);
+.balance-pill .bal-amount {
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  margin-top: 1px;
+  font-variant-numeric: tabular-nums;
 }
 
-button span {
-    display: inline-block;
-    transform: skew(20deg);
+/* ── Cards ── */
+.card {
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid #e4e7ec;
+  padding: 22px 24px;
 }
 
-button:hover{
-    opacity:.9;
+.card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: .7px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
 }
 
-.buttons button:nth-child(1){
-    background:#1565c0;
+.card-title svg { flex-shrink: 0; }
+
+/* ── Inputs ── */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 14px;
 }
 
-.buttons button:nth-child(2){
-    background:#2e7d32;
+.field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
 }
 
-.buttons button:nth-child(3){
-    background:#c62828;
+.field input {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 15px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #f9fafb;
+  color: #111827;
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
 }
 
-#message{
-    margin-top:20px;
-    padding:12px;
-    background:#f4f4f4;
-    border-left:5px solid #1565c0;
-    border-radius:5px;
-    font-weight:bold;
+.field input:focus {
+  border-color: #1565c0;
+  box-shadow: 0 0 0 3px rgba(21,101,192,.12);
+  background: #fff;
 }
 
-hr{
-    margin:25px 0;
+/* Name row */
+.name-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
 }
 
-h3{
-    margin-bottom:10px;
-    color:#333;
+.name-row .field { flex: 1; margin-bottom: 0; }
+
+/* ── Buttons ── */
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity .15s, transform .1s;
+  white-space: nowrap;
 }
 
-table{
-    width:100%;
-    border-collapse:collapse;
-    font-size:14px;
+.btn:hover { opacity: .88; }
+.btn:active { transform: scale(.97); }
+
+.btn-save  { background: #1565c0; color: #fff; }
+.btn-check { background: #f1f5fe; color: #1565c0; border: 1px solid #b8d0f5; }
+.btn-dep   { background: #2e7d32; color: #fff; }
+.btn-wd    { background: #c62828; color: #fff; }
+
+.actions-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 6px;
 }
 
-table th{
-    background:#1565c0;
-    color:white;
-    padding:10px;
+.actions-row .btn { flex: 1; min-width: 110px; padding: 12px 16px; font-size: 15px; }
+
+/* ── Message box ── */
+.msg-box {
+  padding: 12px 16px;
+  background: #f0f5ff;
+  border-left: 4px solid #1565c0;
+  border-radius: 0 8px 8px 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1e3a6e;
+  margin-top: 14px;
+  transition: background .2s;
 }
 
-table td{
-    border:1px solid #ddd;
-    padding:8px;
-    text-align:center;
+.msg-box.success { background: #f0fdf4; border-color: #2e7d32; color: #1a4d1f; }
+.msg-box.error   { background: #fff5f5; border-color: #c62828; color: #7f1d1d; }
+
+/* ── Account badge ── */
+.account-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #f1f5fe;
+  border: 1px solid #b8d0f5;
+  border-radius: 999px;
+  padding: 5px 14px 5px 8px;
+  font-size: 13px;
+  color: #1e3a6e;
+  font-weight: 600;
+  margin-top: 12px;
 }
 
-table tbody tr:nth-child(even){
-    background:#f7f7f7;
+.account-badge .avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #1565c0;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ── Table ── */
+.table-wrap { overflow-x: auto; margin-top: 4px; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  min-width: 540px;
+}
+
+thead tr {
+  background: #1565c0;
+}
+
+thead th {
+  color: #fff;
+  font-weight: 600;
+  padding: 10px 12px;
+  text-align: center;
+  letter-spacing: .3px;
+}
+
+tbody tr {
+  border-bottom: 1px solid #f1f3f5;
+  transition: background .1s;
+}
+
+tbody tr:hover { background: #f8faff; }
+
+tbody td {
+  padding: 9px 12px;
+  text-align: center;
+  color: #374151;
+}
+
+.tx-dep  { color: #2e7d32; font-weight: 600; }
+.tx-wd   { color: #c62828; font-weight: 600; }
+.tx-bal  { color: #1565c0; font-weight: 600; }
+
+.empty-row td {
+  padding: 24px;
+  color: #9ca3af;
+  font-style: italic;
 }
 </style>
-
 </head>
 <body>
 
-<div class="atm-container">
+<div class="atm-wrap">
 
-<h2> ATM Machine</h2>
+  <!-- Header -->
+  <div class="atm-header">
+    <div class="atm-header-left">
+      <h1>ATM Machine</h1>
+      <p>Secure banking terminal</p>
+    </div>
+    <div class="balance-pill">
+      <div class="bal-label">Current Balance</div>
+      <div class="bal-amount" id="balance">₱0.00</div>
+    </div>
+  </div>
 
-<p id="balance">Balance: ₱0.00</p>
+  <!-- Account setup -->
+  <div class="card">
+    <div class="card-title">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Account holder
+    </div>
+    <div class="name-row">
+      <div class="field">
+        <label for="name">Full name</label>
+        <input type="text" id="name" placeholder="e.g. Juan dela Cruz">
+      </div>
+      <button class="btn btn-save" onclick="saveName()">Save</button>
+    </div>
+    <div class="account-badge" id="accountBadge">
+      <div class="avatar" id="avatarInitials">—</div>
+      <span id="displayName">No account holder set</span>
+    </div>
+  </div>
 
-<input type="text" id="name" placeholder="Enter Account Holder Name">
-<button onclick="saveName()"><span>Save Name</span></button>
+  <!-- Transaction -->
+  <div class="card">
+    <div class="card-title">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      Transaction
+    </div>
+    <div class="field">
+      <label for="amount">Amount (₱)</label>
+      <input type="number" id="amount" placeholder="0.00" min="0" step="0.01">
+    </div>
+    <div class="actions-row">
+      <button class="btn btn-check" onclick="checkBalance()">Check Balance</button>
+      <button class="btn btn-dep"   onclick="deposit()">Deposit</button>
+      <button class="btn btn-wd"    onclick="withdraw()">Withdraw</button>
+    </div>
+    <div class="msg-box" id="message">Welcome! Please choose a transaction.</div>
+  </div>
 
-<p style="margin-top: 15px; margin-bottom: 15px;"><strong>Account Holder:</strong> <span id="displayName">None</span></p>
-
-<input type="number" id="amount" placeholder="Enter Amount">
-
-
-<div class="buttons">
-<button onclick="checkBalance()"><span>Check Balance</span></button>
-<button onclick="deposit()"><span>Deposit</span></button>
-<button onclick="withdraw()"><span>Withdraw</span></button>
-</div>
-
-<div id="message">
-Welcome! Please choose a transaction.
-</div>
-
-<hr>
-
-<h3>Transaction Summary (Audit Log)</h3>
-
-<table id="logTable">
-<thead>
-<tr>
-<th>No.</th>
-<th>Name</th>
-<th>Date & Time</th>
-<th>Transaction</th>
-<th>Amount</th>
-<th>Balance</th>
-</tr>
-</thead>
-
-<tbody>
-
-</tbody>
-
-</table>
+  <!-- Audit log -->
+  <div class="card">
+    <div class="card-title">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      Transaction history
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Date &amp; Time</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Balance</th>
+          </tr>
+        </thead>
+        <tbody id="logBody">
+          <tr class="empty-row"><td colspan="6">No transactions yet</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
 </div>
 
 <script>
-
 let balance = 0;
 let transactionLog = [];
-let accountHolder = "None";
+let accountHolder = "";
 
-function saveName(){
-    let inputName = getName();
-    if(inputName.trim() === ""){
-        showMessage("Please enter a valid name.");
-        return;
-    }
-    accountHolder = inputName;
-    document.getElementById("displayName").innerText = accountHolder;
-    showMessage(`Account holder updated to: ${accountHolder}`);
-    document.getElementById("name").value = "";
+function saveName() {
+  const val = document.getElementById("name").value.trim();
+  if (!val) { showMessage("Please enter a valid name.", "error"); return; }
+  accountHolder = val;
+  document.getElementById("displayName").textContent = accountHolder;
+  const initials = accountHolder.split(" ").map(w => w[0]).slice(0,2).join("").toUpperCase();
+  document.getElementById("avatarInitials").textContent = initials;
+  document.getElementById("name").value = "";
+  showMessage(`Account holder set to: ${accountHolder}`, "success");
 }
 
-function checkBalance(){
-    showMessage(`Your current balance is ₱${balance.toFixed(2)}`);
-    addTransaction("Balance Inquiry",0);
+function checkBalance() {
+  showMessage(`Current balance is ₱${balance.toFixed(2)}`, "");
+  addLog("Balance inquiry", 0);
 }
 
-function deposit(){
-    let amount = getAmount();
-    if(isNaN(amount) || amount<=0){
-        showMessage("Please enter a valid deposit amount.");
-        return;
-    }
-    balance += amount;
-    updateBalance();
-    showMessage(`Successfully deposited ₱${amount.toFixed(2)}.`);
-    addTransaction("Deposit",amount);
-    clearInput();
+function deposit() {
+  const amt = parseFloat(document.getElementById("amount").value);
+  if (isNaN(amt) || amt <= 0) { showMessage("Enter a valid deposit amount.", "error"); return; }
+  balance += amt;
+  updateBalance();
+  showMessage(`Deposited ₱${amt.toFixed(2)} successfully.`, "success");
+  addLog("Deposit", amt);
+  document.getElementById("amount").value = "";
 }
 
-function withdraw(){
-    let amount = getAmount();
-    if(isNaN(amount) || amount<=0){
-        showMessage("Please enter a valid withdrawal amount.");
-        return;
-    }
-    if(amount>balance){
-        showMessage("Insufficient funds.");
-        return;
-    }
-    balance -= amount;
-    updateBalance();
-    showMessage(`Successfully withdrew ₱${amount.toFixed(2)}.`);
-    addTransaction("Withdraw",amount);
-    clearInput();
+function withdraw() {
+  const amt = parseFloat(document.getElementById("amount").value);
+  if (isNaN(amt) || amt <= 0) { showMessage("Enter a valid withdrawal amount.", "error"); return; }
+  if (amt > balance) { showMessage("Insufficient funds.", "error"); return; }
+  balance -= amt;
+  updateBalance();
+  showMessage(`Withdrew ₱${amt.toFixed(2)} successfully.`, "success");
+  addLog("Withdraw", amt);
+  document.getElementById("amount").value = "";
 }
 
-function getAmount(){
-    return parseFloat(document.getElementById("amount").value);
+function updateBalance() {
+  document.getElementById("balance").textContent = `₱${balance.toFixed(2)}`;
 }
 
-function getName(){
-    return document.getElementById("name").value;
+function showMessage(msg, type) {
+  const el = document.getElementById("message");
+  el.textContent = msg;
+  el.className = "msg-box" + (type ? " " + type : "");
 }
 
-if (typeof updateBalance === "undefined") {
-    function updateBalance(){
-        document.getElementById("balance").innerHTML= `Balance: ₱${balance.toFixed(2)}`;
-    }
-} else {
-    function updateBalance(){
-        document.getElementById("balance").innerHTML= `Balance: ₱${balance.toFixed(2)}`;
-    }
+function addLog(type, amt) {
+  transactionLog.push({
+    name: accountHolder || "—",
+    datetime: new Date().toLocaleString(),
+    type,
+    amount: amt,
+    balance
+  });
+  renderLog();
 }
 
-function showMessage(message){
-    document.getElementById("message").innerHTML=message;
+function renderLog() {
+  const tbody = document.getElementById("logBody");
+  tbody.innerHTML = transactionLog.slice().reverse().map((item, i) => {
+    const cls = item.type === "Deposit" ? "tx-dep" : item.type === "Withdraw" ? "tx-wd" : "tx-bal";
+    const amtStr = item.amount > 0 ? `₱${item.amount.toFixed(2)}` : "—";
+    return `<tr>
+      <td>${transactionLog.length - i}</td>
+      <td>${item.name}</td>
+      <td>${item.datetime}</td>
+      <td class="${cls}">${item.type}</td>
+      <td>${amtStr}</td>
+      <td>₱${item.balance.toFixed(2)}</td>
+    </tr>`;
+  }).join("");
 }
-
-function clearInput(){
-    document.getElementById("amount").value="";
-}
-
-function addTransaction(type,amount){
-    transactionLog.push({
-        name: accountHolder,
-        datetime:new Date().toLocaleString(),
-        transaction:type,
-        amount:amount,
-        balance:balance
-    });
-    updateLogTable();
-}
-
-function updateLogTable(){
-    let tbody=document.querySelector("#logTable tbody");
-    tbody.innerHTML="";
-    transactionLog.forEach(function(item,index){
-        tbody.innerHTML+=`
-        <tr>
-            <td>${index+1}</td>
-            <td>${item.name}</td>
-            <td>${item.datetime}</td>
-            <td>${item.transaction}</td>
-            <td>₱${item.amount.toFixed(2)}</td>
-            <td>₱${item.balance.toFixed(2)}</td>
-        </tr>
-        `;
-    });
-}
-
 </script>
 
 </body>
